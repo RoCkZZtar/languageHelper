@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testapplication/VocanularyCard.dart';
 
 class VocabularyList extends StatefulWidget {
   const VocabularyList({Key? key}) : super(key: key);
@@ -22,19 +23,15 @@ class _VocabularyList extends State {
           itemCount: items.length,
           padding: const EdgeInsets.all(1.0),
           itemBuilder: (context, i) {
-            return Card(
-              margin: EdgeInsets.all(3.0),
-              child: Text(
-                items[i],
-                style: TextStyle(fontSize: 80),
-              ),
-            );
+            return VocabularyCard(text: items[i]);
           },
         )),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           child: TextField(
             controller: _controller,
+            decoration: const InputDecoration(
+                labelText: "Word", border: OutlineInputBorder()),
             onSubmitted: (String value) {
               items.add(value);
               _controller.clear();
