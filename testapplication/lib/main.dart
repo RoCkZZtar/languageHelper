@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testapplication/Navigation.dart';
 import 'package:testapplication/vocabulary.dart';
 
 void main() {
@@ -13,8 +14,10 @@ class LanguageHelper extends StatelessWidget {
     return MaterialApp(
       title: 'Language Helper',
       home: Scaffold(
+        drawer: Navigation(),
         appBar: AppBar(
           title: const Text('Language Helper'),
+          backgroundColor: Colors.orange,
         ),
         body: const VocabularyList(),
       ),

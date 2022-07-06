@@ -43,8 +43,14 @@ class _VocabularyCard extends State {
           });
         },
         icon: (!favoriteItemClicked)
-            ? const Icon(Icons.favorite_border_outlined)
-            : const Icon(Icons.favorite));
+            ? const Icon(
+                Icons.favorite_border_outlined,
+                color: Colors.red,
+              )
+            : const Icon(
+                Icons.favorite,
+                color: Colors.red,
+              ));
   }
 
   Widget clickableLearnItem() {
@@ -55,7 +61,7 @@ class _VocabularyCard extends State {
           });
         },
         icon: (!learnItemClicked)
-            ? const Icon(Icons.lightbulb_outlined)
-            : const Icon(Icons.lightbulb));
+            ? const Icon(Icons.lightbulb_outlined, color: Colors.yellow)
+            : const Icon(Icons.lightbulb, color: Colors.yellow));
   }
 }
