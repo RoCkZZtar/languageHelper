@@ -20,6 +20,7 @@ class _VocabularyCard extends State {
   Widget build(BuildContext context) {
     return Card(
         margin: const EdgeInsets.all(3.0),
+        color: Colors.orangeAccent,
         child: Column(
           children: [
             ListTile(
