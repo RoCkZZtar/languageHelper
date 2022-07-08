@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testapplication/Navigation.dart';
-import 'package:testapplication/vocabulary.dart';
+import 'package:testapplication/vocabulary/vocabulary.dart';
 
 void main() {
   runApp(const LanguageHelper());
