@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class Word {
   final String value;
-  final bool favorite;
-  final bool learning;
+  bool favorite;
+  bool learning;
 
   Word(this.value, this.favorite, this.learning);
 

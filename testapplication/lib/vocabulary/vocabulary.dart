@@ -52,12 +52,16 @@ class _VocabularyList extends State {
         itemCount: list.length,
         padding: const EdgeInsets.all(1.0),
         itemBuilder: (context, i) {
-          return VocabularyCard(text: list[i].value);
+          return VocabularyCard(
+            text: list[i],
+            words: list,
+          );
         },
       );
 
   void updateList(String word) async {
     List<Word> temp = await util.readFile().then((value) => value);
+
     temp.add(Word(word, false, false));
     util.saveFile(temp);
   }
