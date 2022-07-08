@@ -15,16 +15,16 @@ class Navigation extends StatelessWidget {
             child: Text("Menu", style: TextStyle(fontSize: 25)),
           ),
           ListTile(
-            leading: Icon(Icons.lightbulb),
-            title: Text("Learning"),
+            leading: const Icon(Icons.lightbulb),
+            title: const Text("Learning"),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => LearningList()));
             },
           ),
           ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text("Favorites"),
+            leading: const Icon(Icons.favorite),
+            title: const Text("Favorites"),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => FavoriteList()));
