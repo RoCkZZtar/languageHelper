@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testapplication/favoritesList/FavoritesList.dart';
+import 'package:testapplication/vocabulary/Word.dart';
 
 class Navigation extends StatelessWidget {
   @override
@@ -7,7 +8,7 @@ class Navigation extends StatelessWidget {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
-        children: const [
+        children: [
           DrawerHeader(
             decoration: BoxDecoration(color: Colors.orangeAccent),
             child: Text("Menu", style: TextStyle(fontSize: 25)),
@@ -19,6 +20,10 @@ class Navigation extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.favorite),
             title: Text("Favorites"),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => FavoriteList()));
+            },
           )
         ],
       ),
