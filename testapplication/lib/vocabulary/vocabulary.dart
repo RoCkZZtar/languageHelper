@@ -54,28 +54,24 @@ class _VocabularyList extends State {
                                   TextStyle(color: Colors.orange, fontSize: 20),
                             )),
                             const Padding(padding: EdgeInsets.only(top: 20)),
-                            TextField(
-                              controller: _wordController,
-                              decoration: const InputDecoration(
-                                  labelText: "Word",
-                                  border: OutlineInputBorder()),
+                            TranslationTextField(
+                              wordController: _wordController,
+                              text: "Word",
                             ),
                             const Padding(padding: EdgeInsets.only(top: 20)),
-                            TextField(
-                              controller: _translationController,
-                              decoration: const InputDecoration(
-                                  labelText: "Translation",
-                                  border: OutlineInputBorder()),
-                            ),
+                            TranslationTextField(
+                                wordController: _translationController,
+                                text: "Translation"),
                             TextButton(
                                 onPressed: () async {
-                                  updateList(Word(
+                                  await updateList(Word(
                                       _wordController.text,
                                       _translationController.text,
                                       false,
                                       false));
                                   _wordController.clear();
                                   _translationController.clear();
+                                  callback();
                                   setState(() {});
                                   Navigator.pop(context);
                                 },
@@ -95,14 +91,39 @@ class _VocabularyList extends State {
           return VocabularyCard(
             text: list[i],
             words: list,
+            callback: callback,
           );
         },
       );
 
-  void updateList(Word word) async {
+  Future<void> updateList(Word word) async {
     List<Word> temp = await util.readFile().then((value) => value);
 
     temp.add(word);
     util.saveFile(temp);
+  }
+
+  void callback() => setState(() {});
+}
+
+class TranslationTextField extends StatelessWidget {
+  const TranslationTextField(
+      {Key? key,
+      required TextEditingController wordController,
+      required String text})
+      : _wordController = wordController,
+        disaplyText = text,
+        super(key: key);
+
+  final TextEditingController _wordController;
+  final String disaplyText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _wordController,
+      decoration: const InputDecoration(
+          labelText: "Word", border: OutlineInputBorder()),
+    );
   }
 }

@@ -1,16 +1,24 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:testapplication/Navigation.dart';
 import 'package:testapplication/util/FileUtil.dart';
 import 'package:testapplication/vocabulary/Word.dart';
 
 class VocabularyCard extends StatefulWidget {
   Word text;
   List<Word> words;
+  Function callback;
 
-  VocabularyCard({Key? key, required this.text, required this.words})
+  VocabularyCard(
+      {Key? key,
+      required this.text,
+      required this.words,
+      required this.callback})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _VocabularyCard(text, words);
+  State<StatefulWidget> createState() => _VocabularyCard(text, words, callback);
 }
 
 class _VocabularyCard extends State {
@@ -19,31 +27,70 @@ class _VocabularyCard extends State {
   bool favoriteItemClicked = false;
   bool learnItemClicked = false;
   List<Word> words = [];
+  late Function callback;
 
-  _VocabularyCard(Word word, List<Word> words) {
+  _VocabularyCard(Word word, List<Word> words, Function callback) {
     this.favoriteItemClicked = word.favorite;
     this.learnItemClicked = word.learning;
     this.text = word.value;
     this.words = words;
+    this.callback = callback;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        margin: const EdgeInsets.all(3.0),
-        color: Colors.orangeAccent,
-        child: Column(
-          children: [
-            ListTile(
-                title: Text(text),
-                trailing: FittedBox(
-                  fit: BoxFit.fill,
-                  child: Column(
-                    children: [clickableFavoriteIcon(), clickableLearnItem()],
-                  ),
-                )),
-          ],
-        ));
+    return GestureDetector(
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (builder) {
+              return Dialog(
+                  child: TextButton(
+                child: const Text("Delete"),
+                onPressed: () async {
+                  /*await removeAsync().then(
+                    (value) {
+                      callback();
+                      Navigator.pop(context);
+                    },
+                  );*/
+                  await remove();
+                  callback();
+                  Navigator.pop(context);
+                },
+              ));
+            });
+      },
+      child: Card(
+          margin: const EdgeInsets.all(3.0),
+          color: Colors.orangeAccent,
+          child: Column(
+            children: [
+              ListTile(
+                  title: Text(text),
+                  trailing: FittedBox(
+                    fit: BoxFit.fill,
+                    child: Column(
+                      children: [clickableFavoriteIcon(), clickableLearnItem()],
+                    ),
+                  )),
+            ],
+          )),
+    );
+  }
+
+  removeAsync() async {
+    Future<void>.delayed(const Duration(milliseconds: 200), (() async {
+      List<Word> words = await util.readFile();
+      words.removeWhere((element) => element.value == text);
+      util.saveFile(words);
+    }));
+  }
+
+  Future<void> remove() async {
+    List<Word> words = await util.readFile();
+    words.removeWhere((element) => element.value == text);
+    util.saveFile(words);
   }
 
   Widget clickableFavoriteIcon() {
