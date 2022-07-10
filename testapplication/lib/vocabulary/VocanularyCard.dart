@@ -48,12 +48,6 @@ class _VocabularyCard extends State {
                   child: TextButton(
                 child: const Text("Delete"),
                 onPressed: () async {
-                  /*await removeAsync().then(
-                    (value) {
-                      callback();
-                      Navigator.pop(context);
-                    },
-                  );*/
                   await remove();
                   callback();
                   Navigator.pop(context);
@@ -95,8 +89,8 @@ class _VocabularyCard extends State {
 
   Widget clickableFavoriteIcon() {
     return IconButton(
-        onPressed: () {
-          updateFavoriteButton();
+        onPressed: () async {
+          await updateFavoriteButton();
           setState(() {});
         },
         icon: (!favoriteItemClicked)
@@ -112,8 +106,8 @@ class _VocabularyCard extends State {
 
   Widget clickableLearnItem() {
     return IconButton(
-        onPressed: () {
-          updateLearningField();
+        onPressed: () async {
+          await updateLearningField();
           setState(() {});
         },
         icon: (!learnItemClicked)
@@ -121,23 +115,25 @@ class _VocabularyCard extends State {
             : const Icon(Icons.lightbulb, color: Colors.yellow));
   }
 
-  void updateFavoriteButton() {
-    Word result = words.firstWhere((element) => element.value == text);
+  Future<void> updateFavoriteButton() async {
+    List<Word> list = await util.readFile().then((value) => value);
+    Word result = list.firstWhere((element) => element.value == text);
     favoriteItemClicked = !favoriteItemClicked;
     result.favorite = favoriteItemClicked;
-    int index = words.indexWhere((element) => element.value == text);
+    int index = list.indexWhere((element) => element.value == text);
 
-    words[index] = result;
-    util.saveFile(words);
+    list[index] = result;
+    util.saveFile(list);
   }
 
-  void updateLearningField() {
-    Word result = words.firstWhere((element) => element.value == text);
+  Future<void> updateLearningField() async {
+    List<Word> list = await util.readFile().then((value) => value);
+    Word result = list.firstWhere((element) => element.value == text);
     learnItemClicked = !learnItemClicked;
     result.learning = learnItemClicked;
-    int index = words.indexWhere((element) => element.value == text);
+    int index = list.indexWhere((element) => element.value == text);
 
-    words[index] = result;
-    util.saveFile(words);
+    list[index] = result;
+    util.saveFile(list);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testapplication/favoritesList/FavoriteCard.dart';
+import 'package:testapplication/learningList/LearningCard.dart';
 import 'package:testapplication/util/FileUtil.dart';
 
 import '../vocabulary/Word.dart';
@@ -47,7 +48,7 @@ class _LearningList extends State {
         itemCount: list.length,
         padding: const EdgeInsets.all(1.0),
         itemBuilder: (context, i) {
-          return FavoriteCard(
+          return LearningCard(
             text: list[i],
             words: list,
           );

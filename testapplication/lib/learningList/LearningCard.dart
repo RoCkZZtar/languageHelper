@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:testapplication/util/FileUtil.dart';
 import 'package:testapplication/vocabulary/Word.dart';
 
-class FavoriteCard extends StatefulWidget {
+class LearningCard extends StatefulWidget {
   Word text;
   List<Word> words;
 
-  FavoriteCard({Key? key, required this.text, required this.words})
+  LearningCard({Key? key, required this.text, required this.words})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _FavoriteCard(text, words);
+  State<StatefulWidget> createState() => _LearningCard(text, words);
 }
 
-class _FavoriteCard extends State {
+class _LearningCard extends State {
   late String text;
   FileUtil util = FileUtil();
   bool favoriteItemClicked = false;
   bool learnItemClicked = false;
   List<Word> words = [];
 
-  _FavoriteCard(Word word, List<Word> words) {
+  _LearningCard(Word word, List<Word> words) {
     favoriteItemClicked = word.favorite;
     learnItemClicked = word.learning;
     text = word.value;
