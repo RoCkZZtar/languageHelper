@@ -19,6 +19,11 @@ class FileUtil {
 
   Future<List<Word>> readFile() async {
     File file = File(await getFilePath());
+
+    if (!file.existsSync()) {
+      file.create();
+    }
+
     Iterable iterable = jsonDecode(await file.readAsString());
 
     return List<Word>.from(iterable.map((e) => Word.fromJson(e)));

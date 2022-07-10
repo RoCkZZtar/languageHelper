@@ -30,6 +30,9 @@ class _VocabularyList extends State {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return createView(snapshot.data!);
+            } else {
+              util.saveFile(
+                  List.of(<Word>[Word("value", "translation", false, false)]));
             }
             return const Text("No data");
           },
@@ -40,43 +43,45 @@ class _VocabularyList extends State {
           onPressed: () {
             showDialog(
                 context: context,
-                builder: (context) => Dialog(
+                builder: (context) => SimpleDialog(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40)),
                       elevation: 16,
-                      child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(children: [
-                            const Center(
-                                child: Text(
-                              "Insert",
-                              style:
-                                  TextStyle(color: Colors.orange, fontSize: 20),
-                            )),
-                            const Padding(padding: EdgeInsets.only(top: 20)),
-                            TranslationTextField(
-                              wordController: _wordController,
-                              text: "Word",
-                            ),
-                            const Padding(padding: EdgeInsets.only(top: 20)),
-                            TranslationTextField(
-                                wordController: _translationController,
-                                text: "Translation"),
-                            TextButton(
-                                onPressed: () async {
-                                  await updateList(Word(
-                                      _wordController.text,
-                                      _translationController.text,
-                                      false,
-                                      false));
-                                  _wordController.clear();
-                                  _translationController.clear();
-                                  callback();
-                                  setState(() {});
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("Submit")),
-                          ])),
+                      children: [
+                        Container(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(children: [
+                              const Center(
+                                  child: Text(
+                                "Insert",
+                                style: TextStyle(
+                                    color: Colors.orange, fontSize: 20),
+                              )),
+                              const Padding(padding: EdgeInsets.only(top: 20)),
+                              TranslationTextField(
+                                wordController: _wordController,
+                                text: "Word",
+                              ),
+                              const Padding(padding: EdgeInsets.only(top: 20)),
+                              TranslationTextField(
+                                  wordController: _translationController,
+                                  text: "Translation"),
+                              TextButton(
+                                  onPressed: () async {
+                                    await updateList(Word(
+                                        _wordController.text,
+                                        _translationController.text,
+                                        false,
+                                        false));
+                                    _wordController.clear();
+                                    _translationController.clear();
+                                    callback();
+                                    setState(() {});
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Submit")),
+                            ]))
+                      ],
                     ));
           },
         )
@@ -122,8 +127,8 @@ class TranslationTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: _wordController,
-      decoration: const InputDecoration(
-          labelText: "Word", border: OutlineInputBorder()),
+      decoration: InputDecoration(
+          labelText: disaplyText, border: const OutlineInputBorder()),
     );
   }
 }

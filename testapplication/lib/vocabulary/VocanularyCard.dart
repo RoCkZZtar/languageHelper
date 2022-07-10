@@ -23,9 +23,11 @@ class VocabularyCard extends StatefulWidget {
 
 class _VocabularyCard extends State {
   late String text;
+  late String translation;
   FileUtil util = FileUtil();
   bool favoriteItemClicked = false;
   bool learnItemClicked = false;
+  bool showTranslation = false;
   List<Word> words = [];
   late Function callback;
 
@@ -33,6 +35,7 @@ class _VocabularyCard extends State {
     this.favoriteItemClicked = word.favorite;
     this.learnItemClicked = word.learning;
     this.text = word.value;
+    this.translation = word.translation;
     this.words = words;
     this.callback = callback;
   }
@@ -55,13 +58,17 @@ class _VocabularyCard extends State {
               ));
             });
       },
+      onTap: () {
+        showTranslation = !showTranslation;
+        callback();
+      },
       child: Card(
           margin: const EdgeInsets.all(3.0),
-          color: Colors.orangeAccent,
+          color: (!showTranslation) ? Colors.orangeAccent : Colors.green,
           child: Column(
             children: [
               ListTile(
-                  title: Text(text),
+                  title: (!showTranslation) ? Text(text) : Text(translation),
                   trailing: FittedBox(
                     fit: BoxFit.fill,
                     child: Column(
