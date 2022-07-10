@@ -15,6 +15,7 @@ class FileUtil {
   void saveFile(List<Word> words) async {
     File file = File(await getFilePath());
     file.writeAsString(jsonEncode(words));
+    print(jsonEncode(words));
   }
 
   Future<List<Word>> readFile() async {

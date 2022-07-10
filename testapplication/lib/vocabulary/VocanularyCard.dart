@@ -1,7 +1,4 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:testapplication/Navigation.dart';
 import 'package:testapplication/util/FileUtil.dart';
 import 'package:testapplication/vocabulary/Word.dart';
 
@@ -21,8 +18,8 @@ class VocabularyCard extends StatefulWidget {
   State<StatefulWidget> createState() => _VocabularyCard(text, words, callback);
 }
 
-class _VocabularyCard extends State {
-  late String text;
+class _VocabularyCard extends State<VocabularyCard> {
+  late Word word;
   late String translation;
   FileUtil util = FileUtil();
   bool favoriteItemClicked = false;
@@ -31,12 +28,19 @@ class _VocabularyCard extends State {
   List<Word> words = [];
   late Function callback;
 
-  _VocabularyCard(Word word, List<Word> words, Function callback) {
-    this.favoriteItemClicked = word.favorite;
-    this.learnItemClicked = word.learning;
-    this.text = word.value;
-    this.translation = word.translation;
-    this.words = words;
+  @override
+  void initState() {
+    super.initState();
+    word = widget.text;
+    words = widget.words;
+    callback = widget.callback;
+  }
+
+  _VocabularyCard(Word word1, List<Word> list, Function callback) {
+    word = word1;
+    words = list;
+    learnItemClicked = word1.learning;
+    favoriteItemClicked = word1.favorite;
     this.callback = callback;
   }
 
@@ -62,35 +66,48 @@ class _VocabularyCard extends State {
         showTranslation = !showTranslation;
         callback();
       },
-      child: Card(
-          margin: const EdgeInsets.all(3.0),
-          color: (!showTranslation) ? Colors.orangeAccent : Colors.green,
-          child: Column(
-            children: [
-              ListTile(
-                  title: (!showTranslation) ? Text(text) : Text(translation),
-                  trailing: FittedBox(
-                    fit: BoxFit.fill,
-                    child: Column(
-                      children: [clickableFavoriteIcon(), clickableLearnItem()],
-                    ),
-                  )),
-            ],
-          )),
+      child: Container(
+          height: 90,
+          child: Card(
+              margin: const EdgeInsets.all(3.0),
+              child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  color:
+                      (!showTranslation) ? Colors.orangeAccent : Colors.green,
+                  height: 200,
+                  width: 200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ListTile(
+                          title: (!showTranslation)
+                              ? Text(widget.text.value)
+                              : Text(widget.text.translation),
+                          trailing: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Column(
+                              children: [
+                                clickableFavoriteIcon(),
+                                clickableLearnItem()
+                              ],
+                            ),
+                          )),
+                    ],
+                  )))),
     );
   }
 
   removeAsync() async {
-    Future<void>.delayed(const Duration(milliseconds: 200), (() async {
+    Future<void>.delayed(const Duration(milliseconds: 300), (() async {
       List<Word> words = await util.readFile();
-      words.removeWhere((element) => element.value == text);
+      words.removeWhere((element) => element.value == word.value);
       util.saveFile(words);
     }));
   }
 
   Future<void> remove() async {
     List<Word> words = await util.readFile();
-    words.removeWhere((element) => element.value == text);
+    words.removeWhere((element) => element.value == word.value);
     util.saveFile(words);
   }
 
@@ -124,10 +141,10 @@ class _VocabularyCard extends State {
 
   Future<void> updateFavoriteButton() async {
     List<Word> list = await util.readFile().then((value) => value);
-    Word result = list.firstWhere((element) => element.value == text);
+    Word result = list.firstWhere((element) => element.value == word.value);
     favoriteItemClicked = !favoriteItemClicked;
     result.favorite = favoriteItemClicked;
-    int index = list.indexWhere((element) => element.value == text);
+    int index = list.indexWhere((element) => element.value == word.value);
 
     list[index] = result;
     util.saveFile(list);
@@ -135,10 +152,10 @@ class _VocabularyCard extends State {
 
   Future<void> updateLearningField() async {
     List<Word> list = await util.readFile().then((value) => value);
-    Word result = list.firstWhere((element) => element.value == text);
+    Word result = list.firstWhere((element) => element.value == word.value);
     learnItemClicked = !learnItemClicked;
     result.learning = learnItemClicked;
-    int index = list.indexWhere((element) => element.value == text);
+    int index = list.indexWhere((element) => element.value == word.value);
 
     list[index] = result;
     util.saveFile(list);

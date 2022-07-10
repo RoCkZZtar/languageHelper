@@ -38,7 +38,7 @@ class AddPopUp extends StatelessWidget {
             ),
             TextButton(
                 onPressed: () async {
-                  updateList(Word(_wordController.text,
+                  await updateList(Word(_wordController.text,
                       _translationController.text, false, false));
                   callback();
                   Navigator.pop(context);
@@ -48,7 +48,7 @@ class AddPopUp extends StatelessWidget {
     );
   }
 
-  void updateList(Word word) async {
+  Future<void> updateList(Word word) async {
     List<Word> temp = await util.readFile().then((value) => value);
     temp.add(word);
     util.saveFile(temp);

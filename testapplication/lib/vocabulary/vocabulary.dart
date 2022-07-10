@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:testapplication/addition/AddButton.dart';
 import 'package:testapplication/util/FileUtil.dart';
 import 'package:testapplication/vocabulary/VocanularyCard.dart';
 import 'package:testapplication/vocabulary/Word.dart';
 
 class VocabularyList extends StatefulWidget {
-  const VocabularyList({Key? key}) : super(key: key);
+  List<Word> list = <Word>[];
+  VocabularyList(List<Word> words, {Key? key}) : super(key: key) {
+    list = words;
+  }
 
   @override
-  State<StatefulWidget> createState() => _VocabularyList();
+  State<StatefulWidget> createState() => _VocabularyList(list);
+
+  Future<List<Word>> getList() => _VocabularyList([]).getList();
+  void updateList(List<Word> items) => _VocabularyList([]).searchList(items);
 }
 
 class _VocabularyList extends State {
@@ -17,6 +22,10 @@ class _VocabularyList extends State {
   final TextEditingController _translationController = TextEditingController();
   List<Word> words = [];
   final FileUtil util = FileUtil();
+
+  _VocabularyList(List<Word> list) {
+    words = list;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +38,11 @@ class _VocabularyList extends State {
           future: util.readFile(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return createView(snapshot.data!);
-            } else {
-              util.saveFile(
-                  List.of(<Word>[Word("value", "translation", false, false)]));
+              if (words.isEmpty) {
+                return createView(snapshot.data!);
+              } else {
+                return createView(words);
+              }
             }
             return const Text("No data");
           },
@@ -87,6 +97,13 @@ class _VocabularyList extends State {
         )
       ],
     );
+  }
+
+  Future<List<Word>> getList() async => await util.readFile();
+
+  void searchList(List<Word> items) {
+    words.addAll(items);
+    setState(() {});
   }
 
   Widget createView(List<Word> list) => ListView.builder(
