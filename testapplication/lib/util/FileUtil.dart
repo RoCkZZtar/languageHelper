@@ -23,6 +23,7 @@ class FileUtil {
 
     if (!file.existsSync()) {
       file.create();
+      saveFile([]);
     }
 
     Iterable iterable = jsonDecode(await file.readAsString());

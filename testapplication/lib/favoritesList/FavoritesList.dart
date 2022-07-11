@@ -44,6 +44,8 @@ class _FavoriteList extends State {
     );
   }
 
+  void callback() => setState(() {});
+
   Widget createListView(List<Word> list) => ListView.builder(
         itemCount: list.length,
         padding: const EdgeInsets.all(1.0),
@@ -51,6 +53,7 @@ class _FavoriteList extends State {
           return FavoriteCard(
             text: list[i],
             words: list,
+            callback: callback,
           );
         },
       );
